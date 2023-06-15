@@ -20,14 +20,14 @@ class Hunt(commands.Cog):
             data = await main.get_bank_data()
             if data[f"{ctx.author.id}"]["hp"] <= 24:
                 return await ctx.send(f'ban con {data[f"{ctx.author.id}"]["hp"]}HP khong du de di san')
-            thuk1 = ["<a:thuK1gif:1115322059841613874>", "<a:thuK1gif:1116033962595328001>","<a:thuK1gif:1116034229587955723>"]
-            thuk2 = ["<a:thuK1gif:1116034300576542751>","<a:thuK1gif:1116034392310161462>", "<a:thuK2gif:1116034488837881856>" ]
-            thuk3 = ["<a:thuK2gif:1116034548443127894>", "<a:thuK2gif:1116034663568384021>", "<a:thuK2gif:1116034816111034479>"]
-            thuk4 = ["<:philong:1115318989137133719>","<a:thuK3gif:1116035130004361357>", "<a:thuK3gif:1116035190075183175>"]
-            thuk5 = ["<a:thuK3gif:1116035320601923664>","<a:thuK3gif:1116035401702973462>", "<a:thuK3gif:1116035547614425098>"]
+            thuk1 = ["<a:thuK1gif:1115322059841613874>", "<a:thuK1gif:1116033962595328001>","<a:thuK1gif:1116034229587955723>", "<a:thuK4gif:1116038514044317776>"]
+            thuk2 = ["<a:thuK1gif:1116034300576542751>","<a:thuK1gif:1116034392310161462>", "<a:thuK2gif:1116034488837881856>", "<a:thuK4gif:1116035682285133854>" ]
+            thuk3 = ["<a:thuK2gif:1116034548443127894>", "<a:thuK2gif:1116034663568384021>", "<a:thuK2gif:1116034816111034479>", "<a:thuK4gif:1116035614593253387>"]
+            thuk4 = ["<:philong:1115318989137133719>","<a:thuK3gif:1116035130004361357>", "<a:thuK3gif:1116035190075183175>", "<a:thuK:1116038561951662121>"]
+            thuk5 = ["<a:thuK3gif:1116035320601923664>","<a:thuK3gif:1116035401702973462>", "<a:thuK3gif:1116035547614425098>","<a:thuK4gif:1116038448965501058>"]
             quaix2 = False
             def hunt():
-                chance = random.choice(["K1"] * 50 + ["K2"]*30 + ["K3"] * 13 + ["K4"] * 5 + ["K5"]*2)
+                chance = random.choice(["K1"] * 50 + ["K2"]*35 + ["K3"] * 10 + ["K4"] * 3 + ["K5"]*2)
                 if chance == "K1":
                     hunt = random.choice(thuk1)
                     hp = 2
