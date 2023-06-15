@@ -16,6 +16,12 @@ class Hunt(commands.Cog):
     @commands.cooldown(1, 9, commands.BucketType.user)
     async def hunt(self, ctx):
         try:
+            equipment = {
+                "2": "<:kiemC1:1118523931406631023>",
+                "3": "<:kiemC2:1118524150756163686>",
+                "4": "<:kiemC3:1118524395766415370>",
+                "0": "Không có vật phẩm nào cả"
+            }
             await main.open_account(ctx.author.id)
             data = await main.get_bank_data()
             if data[f"{ctx.author.id}"]["hp"] <= 24:
@@ -88,7 +94,8 @@ class Hunt(commands.Cog):
             data[f"{ctx.author.id}"]["point"] += coin
             data[f"{ctx.author.id}"]["hp"] -= hp
             main.save_member_data(data)
-            await ctx.send(f"🐺  | Bạn đã đi săn ở **{place}**:\n    | Bạn bắt được: {quai}\n    | +{coin}<:vang:1116221866273681510>\n    | -{hp}HP")
+            trang_bi = equipment[str(str((await main.get_bank_data())[str(ctx.author.id)]["equip"]))]
+            await ctx.send(f"🐺  | **{ctx.author.name}** đã đi săn ở **{place}**:\n    | Bạn bắt được: {quai}\n    | +{coin}<:vang:1116221866273681510>\n    | -{hp}HP\n    | Vật phẩm đang sử dụng: {trang_bi}")
         except Exception as e:
             print(e)
 async def setup(bot):
