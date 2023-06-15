@@ -61,7 +61,10 @@ class Zoo(commands.Cog):
             coin = (await get_bank_data())[f"{ctx.author.id}"]["point"]
             hp = (await get_bank_data())[str(ctx.author.id)]["hp"]
             trang_bi = equipment[str(str((await get_bank_data())[str(ctx.author.id)]["equip"]))]
-            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\nVật phẩm đang sử dụng: {trang_bi}"
+            data = await get_bank_data()
+            lv = data[str(ctx.author.id)]["lv"]
+            exp = data[str(ctx.author.id)]["exp"]
+            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\nLv: {lv}\nexp: {exp}\nVật phẩm đang sử dụng: {trang_bi}"
             await ctx.send(msg)
         except Exception as e:
             print(e)

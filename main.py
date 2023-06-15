@@ -45,6 +45,8 @@ async def open_account(user):
         users[str(user)]["zoo"] = []
         users[str(user)]["hp"] = 100
         users[str(user)]["equip"] = 0
+        users[str(user)]["exp"] = 0
+        users[str(user)]["lv"] = 1
     save_member_data(users)
     return True
 
