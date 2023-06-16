@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from main import get_bank_data, open_account
-
+from command.cache.var import thuk1,thuk2,thuk3,thuk4,thuk5
 class Zoo(commands.Cog):
     config = {
         "name": "zoo",
@@ -34,11 +34,6 @@ class Zoo(commands.Cog):
             legendary = "\n <:L_:1118556123067322418> | "
             await open_account(ctx.author.id)
             data = (await get_bank_data())[f"{ctx.author.id}"]["zoo"]
-            thuk1 = ["<a:thuK1gif:1115322059841613874>", "<a:thuK1gif:1116033962595328001>","<a:thuK1gif:1116034229587955723>", "<a:thuK4gif:1116038514044317776>"]
-            thuk2 = ["<a:thuK1gif:1116034300576542751>","<a:thuK1gif:1116034392310161462>", "<a:thuK2gif:1116034488837881856>", "<a:thuK4gif:1116035682285133854>" ]
-            thuk3 = ["<a:thuK2gif:1116034548443127894>", "<a:thuK2gif:1116034663568384021>", "<a:thuK2gif:1116034816111034479>", "<a:thuK4gif:1116035614593253387>"]
-            thuk4 = ["<:philong:1115318989137133719>","<a:thuK3gif:1116035130004361357>", "<a:thuK3gif:1116035190075183175>", "<a:thuK:1116038561951662121>"]
-            thuk5 = ["<a:thuK3gif:1116035320601923664>","<a:thuK3gif:1116035401702973462>", "<a:thuK3gif:1116035547614425098>","<a:thuK4gif:1116038448965501058>"]
             if True:
                 for quai in data[:]:
                     count = str(data.count(quai))
@@ -64,7 +59,7 @@ class Zoo(commands.Cog):
             data = await get_bank_data()
             lv = data[str(ctx.author.id)]["lv"]
             exp = data[str(ctx.author.id)]["exp"]
-            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\nLv: {lv}\nexp: {exp}\nVật phẩm đang sử dụng: {trang_bi}"
+            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\n<:level:1119126214670561382>: {lv}\nexp: {exp}\nVật phẩm đang sử dụng: {trang_bi}"
             await ctx.send(msg)
         except Exception as e:
             print(e)

@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import main
 import random
+from command.cache.var import thuk1,thuk2,thuk3,thuk4,thuk5
 
 class Hunt(commands.Cog):
     config = {
@@ -26,18 +27,13 @@ class Hunt(commands.Cog):
             data = await main.get_bank_data()
             if data[f"{ctx.author.id}"]["hp"] <= 24:
                 return await ctx.send(f'ban con {data[f"{ctx.author.id}"]["hp"]}HP khong du de di san')
-            thuk1 = ["<a:thuK1gif:1115322059841613874>", "<a:thuK1gif:1116033962595328001>","<a:thuK1gif:1116034229587955723>", "<a:thuK4gif:1116038514044317776>"]
-            thuk2 = ["<a:thuK1gif:1116034300576542751>","<a:thuK1gif:1116034392310161462>", "<a:thuK2gif:1116034488837881856>", "<a:thuK4gif:1116035682285133854>" ]
-            thuk3 = ["<a:thuK2gif:1116034548443127894>", "<a:thuK2gif:1116034663568384021>", "<a:thuK2gif:1116034816111034479>", "<a:thuK4gif:1116035614593253387>"]
-            thuk4 = ["<:philong:1115318989137133719>","<a:thuK3gif:1116035130004361357>", "<a:thuK3gif:1116035190075183175>", "<a:thuK:1116038561951662121>"]
-            thuk5 = ["<a:thuK3gif:1116035320601923664>","<a:thuK3gif:1116035401702973462>", "<a:thuK3gif:1116035547614425098>","<a:thuK4gif:1116038448965501058>"]
             quaix2 = False
             def hunt():
                 rank = data[str(ctx.author.id)]["lv"]
                 if rank <= 5:
-                    chance = random.choice(["K1"]*60+["K2"]*40)
+                    chance = random.choice(["K1"]*65+["K2"]*35)
                 elif 5 < rank <= 10:
-                    chance = random.choice(["K1"]*50+["K2"]*40+["K3"]*6+["K0"]*4)
+                    chance = random.choice(["K1"]*50+["K2"]*40+["K3"]*3+["K0"]*7)
                 else:
                     chance = random.choice(["K1"] * 520 + ["K2"]*350 + ["K3"] * 55 + ["K4"] * 3 + ["K5"]*2 + ["K0"]*70)
                 place = random.choice(["Thung lũng namec","Thung Lũng Tre","Vách Núi Đen","Doanh trại độc nhãn","Đảo Kame"])
@@ -116,11 +112,11 @@ class Hunt(commands.Cog):
                 data[str(ctx.author.id)]["exp"] = 0
                 data[str(ctx.author.id)]["lv"] += 1
                 lv = data[str(ctx.author.id)]["lv"]
-                await ctx.reply(f"**{ctx.author.name}** đã tăng cấp lên **lv{lv}**", delete_after=2)
+                await ctx.reply(f"**{ctx.author.name}** đã tăng cấp lên **<:level:1119126214670561382>{lv}**", delete_after=2)
             lv = data[str(ctx.author.id)]["lv"]
             main.save_member_data(data)
             trang_bi = equipment[str(str((await main.get_bank_data())[str(ctx.author.id)]["equip"]))]
-            await ctx.send(f"🐺  | **{ctx.author.name}** đã đi săn ở **{place}**:\n    | Bạn bắt được: {quai}\n    | +{coin}<:vang:1116221866273681510>\n    | -{hp}HP\n    | +{exp}exp\n    | level: {lv}\n    | Vật phẩm đang sử dụng: {trang_bi}")
+            await ctx.send(f"<:meo:1119142394668011651>  | **{ctx.author.name}** đã đi săn ở **{place}**:\n    | Bạn bắt được: {quai}\n    | +{coin}<:vang:1116221866273681510>\n    | -{hp}HP\n    | +{exp}exp\n    | <:level:1119126214670561382>: {lv}\n    | Vật phẩm đang sử dụng: {trang_bi}")
         except Exception as e:
             print(e)
 async def setup(bot):
