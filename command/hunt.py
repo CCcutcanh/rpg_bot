@@ -30,9 +30,9 @@ class Hunt(commands.Cog):
             quaix2 = False
             def hunt():
                 rank = data[str(ctx.author.id)]["lv"]
-                if rank <= 5:
+                if rank <= 3:
                     chance = random.choice(["K1"]*65+["K2"]*35)
-                elif 5 < rank <= 10:
+                elif 3 < rank <= 8:
                     chance = random.choice(["K1"]*50+["K2"]*40+["K3"]*3+["K0"]*7)
                 else:
                     chance = random.choice(["K1"] * 520 + ["K2"]*350 + ["K3"] * 55 + ["K4"] * 3 + ["K5"]*2 + ["K0"]*70)
@@ -41,28 +41,34 @@ class Hunt(commands.Cog):
                     hunt = "🚫"
                     hp = 0
                     vang = 0
+                    zp = 0
                 elif chance == "K1":
                     hunt = random.choice(thuk1)
                     hp = 2
                     vang = 3
+                    zp = 2
                 elif chance == "K2":
                     hunt = random.choice(thuk2)
                     hp = 3
                     vang = 5
+                    zp = 3
                 elif chance == "K3":
                     hunt = random.choice(thuk3)
                     hp = 7
                     vang = 8
+                    zp = 4
                 elif chance == "K4":
                     hunt = random.choice(thuk4)
                     hp = 8
                     vang = 10
+                    zp = 5
                 else:
                     hunt = random.choice(thuk5)
                     hp = 12
                     vang = 15
+                    zp = 6
                 exp = random.randint(1,4)
-                return {"k": chance, "hunt": hunt, "vang": vang, "hp": hp, "place": place, "exp": exp}
+                return {"k": chance, "hunt": hunt, "vang": vang, "hp": hp, "place": place, "exp": exp,"zp": zp}
             if data[str(ctx.author.id)]['equip'] == 2:
                 chance = random.choice(["Y"] * 40 + ["N"]*60)
                 if chance == "Y":
@@ -84,6 +90,7 @@ class Hunt(commands.Cog):
                 hp = hunt1["hp"] + hunt2["hp"]
                 coin = hunt1["vang"] + hunt2["vang"]
                 exp = hunt1["exp"] + hunt2["exp"]
+                zp = hunt1["zp"] + hunt2["zp"]
                 if hunt1["hunt"] == "🚫":
                     pass
                 else:
@@ -100,6 +107,7 @@ class Hunt(commands.Cog):
                 hp = hunt["hp"]
                 coin = hunt["vang"]
                 exp = hunt["exp"]
+                zp = hunt["zp"]
                 if hunt["hunt"] == "🚫":
                     pass
                 else:
@@ -107,16 +115,21 @@ class Hunt(commands.Cog):
                 main.save_member_data(data)
             data[f"{ctx.author.id}"]["point"] += coin
             data[f"{ctx.author.id}"]["hp"] -= hp
+            data[str(ctx.author.id)]["zp"] += zp
+            if data[str(ctx.author.id)]["zp"] >= 100:
+                await ctx.send(f"**Điểm zoo point của {ctx.author.name} đã đủ 100,  bạn sẽ được tăng 0,2 attack, số point hiện tại sẽ về 0**", delete_after=5)
+                data[str(ctx.author.id)]["attack"] += 0.2
+                data[str(ctx.author.id)]["zp"] = 0
             data[str(ctx.author.id)]["exp"] += exp
             if data[str(ctx.author.id)]["exp"] >= 100:
                 data[str(ctx.author.id)]["exp"] = 0
                 data[str(ctx.author.id)]["lv"] += 1
                 lv = data[str(ctx.author.id)]["lv"]
-                await ctx.reply(f"**{ctx.author.name}** đã tăng cấp lên **<:level:1119126214670561382>{lv}**", delete_after=2)
+                await ctx.reply(f"**{ctx.author.name} đã tăng cấp lên <:level:1119126214670561382>{lv}**", delete_after=5)
             lv = data[str(ctx.author.id)]["lv"]
             main.save_member_data(data)
             trang_bi = equipment[str(str((await main.get_bank_data())[str(ctx.author.id)]["equip"]))]
-            await ctx.send(f"<:meo:1119142394668011651>  | **{ctx.author.name}** đã đi săn ở **{place}**:\n    | Bạn bắt được: {quai}\n    | +{coin}<:vang:1116221866273681510>\n    | -{hp}HP\n    | +{exp}exp\n    | <:level:1119126214670561382>: {lv}\n    | Vật phẩm đang sử dụng: {trang_bi}")
+            await ctx.send(f"<:meo:1119142394668011651>  | **{ctx.author.name}** đã đi săn ở **{place}**:\n    | Bạn bắt được: {quai}\n    | +{coin}<:vang:1116221866273681510>\n    | -{hp}HP\n    | +{exp}exp\n    | <:level:1119126214670561382>: {lv}\n    | + {zp} zoo point\n    | Vật phẩm đang sử dụng: {trang_bi}")
         except Exception as e:
             print(e)
 async def setup(bot):

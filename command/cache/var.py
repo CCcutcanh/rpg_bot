@@ -24,7 +24,20 @@ thuk3 = ["<a:thuK2gif:1116034548443127894>", "<a:thuK2gif:1116034663568384021>",
 thuk4 = ["<:philong:1115318989137133719>","<a:thuK3gif:1116035130004361357>", "<a:thuK3gif:1116035190075183175>", "<a:thuK:1116038561951662121>", "<a:quai4:1119121429267484692>", "<a:thuK1gif:1116034229587955723>"]
 thuk5 = ["<a:thuK3gif:1116035320601923664>","<a:thuK3gif:1116035401702973462>", "<a:thuK3gif:1116035547614425098>","<a:thuK4gif:1116038448965501058>","<a:quai5:1119121425383563314>","<a:thuK4gif:1116038514044317776>"]
 all_thu = thuk1 + thuk2 + thuk3 + thuk4 + thuk5
-
+character = {
+    "vegeta": {
+        "link_img": "https://i.ibb.co/gtJwhRV/vegetapng.png",
+        "path": "command/cache/vegetapng.png"
+    },
+    "santa": {
+        "link_img":"https://i.ibb.co/2YZJzDD/santapng.png",
+        "path": "command/cache/santapng.png"
+    }, 
+    "android20": {
+        "link_img": "https://i.ibb.co/Pm5jhj0/android20png.png",
+        "path": "command/cache/android20png.png"
+    }
+}
 weapon = {
             "01": {
                 "desc": "Hồi 40HP cho nhân vật để có thể tiếp tục đi săn",

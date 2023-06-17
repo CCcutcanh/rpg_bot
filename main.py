@@ -11,8 +11,9 @@ import asyncio
 import json
 import requests
 import itertools
-
+import random
 from host.webdriver import server
+
 
 # khai báo
 # =============================================#
@@ -44,9 +45,12 @@ async def open_account(user):
         users[str(user)]["point"] = 0
         users[str(user)]["zoo"] = []
         users[str(user)]["hp"] = 100
+        users[str(user)]["attack"] = 10
         users[str(user)]["equip"] = 0
         users[str(user)]["exp"] = 0
         users[str(user)]["lv"] = 1
+        users[str(user)]["zp"] = 0
+        users[str(user)]["character"] = random.choice(["santa", "vegeta", "android20"])
     save_member_data(users)
     return True
 
@@ -133,16 +137,12 @@ async def main():
             except Exception as e:
                 print(bcolors.FAIL + f'>> load thất bại module {command[:-3]} ({e})' + bcolors.ENDC)
     print('═════════════════════════════════════════════════════')
-    print(bcolors.OKGREEN + '''
- █████╗ ██╗  ██╗██╗    ██████╗  ██████╗ ████████╗
-██╔══██╗██║ ██╔╝██║    ██╔══██╗██╔═══██╗╚══██╔══╝
-███████║█████╔╝ ██║    ██████╔╝██║   ██║   ██║   
-██╔══██║██╔═██╗ ██║    ██╔══██╗██║   ██║   ██║   
-██║  ██║██║  ██╗██║    ██████╔╝╚██████╔╝   ██║   
-╚═╝  ╚═╝╚═╝  ╚═╝╚═╝    ╚═════╝  ╚═════╝    ╚═╝   
-                                                 
-                                                                       
-''' + bcolors.ENDC)
+    print(bcolors.OKGREEN + """  ____  ____   ____   ____   ___ _____ 
+ |  _ \|  _ \ / ___| | __ ) / _ \_   _|
+ | |_) | |_) | |  _  |  _ \| | | || |  
+ |  _ <|  __/| |_| | | |_) | |_| || |  
+ |_| \_\_|    \____| |____/ \___/ |_|  
+                                       """ + bcolors.ENDC)
     print(f'''
         ══╦═════════════════════════════════╦══
 ╔═════════╩═════════════════════════════════╩═════════╗      

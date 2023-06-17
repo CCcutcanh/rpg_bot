@@ -31,7 +31,7 @@ class Zoo(commands.Cog):
             uncommon = "\n<:U_:1118555223800152065> | "
             rare = "\n<:R_:1118555228481015858> | "
             ultra_rare = "\n<:UR:1118555221862383777> | "
-            legendary = "\n <:L_:1118556123067322418> | "
+            legendary = "\n <:L_:1118556123067322418>| "
             await open_account(ctx.author.id)
             data = (await get_bank_data())[f"{ctx.author.id}"]["zoo"]
             if True:
@@ -59,7 +59,9 @@ class Zoo(commands.Cog):
             data = await get_bank_data()
             lv = data[str(ctx.author.id)]["lv"]
             exp = data[str(ctx.author.id)]["exp"]
-            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\n<:level:1119126214670561382>: {lv}\nexp: {exp}\nVật phẩm đang sử dụng: {trang_bi}"
+            zp = data[str(ctx.author.id)]["zp"]
+            cha = data[str(ctx.author.id)]["character"]
+            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\n<:level:1119126214670561382>: {lv}\nexp: {exp}\nVật phẩm đang sử dụng: {trang_bi}\nzoo point: {zp}\nNhân vật của bạn: {cha}"
             await ctx.send(msg)
         except Exception as e:
             print(e)
