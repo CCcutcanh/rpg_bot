@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import main
 import random
-from command.cache.var import thuk1,thuk2,thuk3,thuk4,thuk5
+from command.cache.var import thuk1,thuk2,thuk3,thuk4,thuk5, weapon
 
 class Hunt(commands.Cog):
     config = {
@@ -128,7 +128,7 @@ class Hunt(commands.Cog):
                 await ctx.reply(f"**{ctx.author.name} đã tăng cấp lên <:level:1119126214670561382>{lv}**", delete_after=5)
             lv = data[str(ctx.author.id)]["lv"]
             main.save_member_data(data)
-            trang_bi = equipment[str(str((await main.get_bank_data())[str(ctx.author.id)]["equip"]))]
+            trang_bi = weapon["0"+str(str((await main.get_bank_data())[str(ctx.author.id)]["equip"]))]["icon"]
             await ctx.send(f"<:meo:1119142394668011651>  | **{ctx.author.name}** đã đi săn ở **{place}**:\n    | Bạn bắt được: {quai}\n    | +{coin}<:vang:1116221866273681510>\n    | -{hp}HP\n    | +{exp}exp\n    | <:level:1119126214670561382>: {lv}\n    | + {zp} zoo point\n    | Vật phẩm đang sử dụng: {trang_bi}")
         except Exception as e:
             print(e)

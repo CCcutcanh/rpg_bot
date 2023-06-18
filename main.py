@@ -51,6 +51,7 @@ async def open_account(user):
         users[str(user)]["lv"] = 1
         users[str(user)]["zp"] = 0
         users[str(user)]["character"] = random.choice(["santa", "vegeta", "android20"])
+        users[str(user)]["pvp_equip"] = 0
     save_member_data(users)
     return True
 

@@ -39,28 +39,51 @@ character = {
     }
 }
 weapon = {
+            "00":{
+                "desc": "error",
+                "price": 0,
+                "icon": "Không có vật phẩm nào cả"
+            },
             "01": {
                 "desc": "Hồi 40HP cho nhân vật để có thể tiếp tục đi săn",
                 "price": 25,
                 "icon": "<:binhHP:1118551444497375292>",
-                "id": "01"
+                "id": 1
             },
             "02": {
                 "desc": "Mỗi lần đi săn có tỉ lệ 40% săn được hai quái cùng lúc",
                 "price": 80,
                 "icon": "<:kiemC1:1118523931406631023>",
-                "id": "02"
+                "id": 2
             },
             "03": {
                 "desc": "Mỗi lần đi săn có tỉ lệ 60% săn được hai quái cùng lúc",
                 "price": 110,
                 "icon": "<:kiemC2:1118524150756163686>",
-                "id": "03"
+                "id": 3
             },
             "04": {    
                 "desc": "Mỗi lần đi săn có tỉ lệ 100% săn được hai quái cùng lúc",
                 "price": 150,
                 "icon": "<:kiemC3:1118524395766415370>",
-                "id": "04"
+                "id": 4
+            },
+            "05": {
+                "icon": "<:pvpkiem3:1119872683367202846>",
+                "desc": "có tỉ lệ 20% ở mỗi trận đánh tất cả các đòn đánh trong trận sẽ tăng 10% dame",
+                "price": 140,
+                "id": 5
+            },
+            "06": {
+                "icon": "<:pvpkiem2:1119872536616898560>",
+                "desc": "có tỉ lệ 16% ở mỗi lượt đánh khi máu thấp hơn hoặc bằng 90 thì sẽ tăng 10 HP",
+                "price": 150,
+                "id": 6
+            },
+            "07": {
+                "icon": "<:pvpkiem1:1119872240478068826>",
+                "desc": "tăng 3% tỉ lệ chí mạng",
+                "price": 110,
+                "id": 7
             }
         }

@@ -6,7 +6,7 @@ from PIL import Image, ImageFont, ImageDraw, ImageEnhance
 import os
 import time
 import random
-from command.cache.var import character, list_color
+from command.cache.var import character, list_color, weapon
 
 class Pvp(commands.Cog):
     config = {
@@ -76,6 +76,8 @@ class Pvp(commands.Cog):
             cha_tag = data[str(mention.id)]["character"]
             cha_user_path = character[data[str(ctx.author.id)]["character"]]["path"]
             cha_tag_path = character[data[str(mention.id)]["character"]]["path"]
+            
+            #edit image
             def run():
                 out = Image.open(os.path.dirname(__file__) + "/cache/khung2.png")
                 #tag
@@ -87,23 +89,52 @@ class Pvp(commands.Cog):
                 d1.text((30, 1), f"{cha_tag}", fill=(255, 255, 255))
                 #user
                 Image.Image.paste(out, cha_user_paste, (165,40))
-                user = drawProgressBar(d1, 140, 10, 69,8,user_hp/100)
+                drawProgressBar(d1, 140, 10, 69,8,user_hp/100)
                 d1.text((140, 1), f"{cha_user}", fill=(255, 255, 255))
                 file = discord.File(fp=bytesarr(out), filename="pvp.png")
                 return file
-            file = run()
+                
+            #first hit
+            user = data[str(ctx.author.id)]
+            tag = data[str(mention.id)]
+            
+            user_at_def = user["attack"]
+            tag_at_def = tag["attack"]
+            
             if turn == "tag":
                 first_hit = f"<@{mention.id}>"
             else:
                 first_hit = f"<@{ctx.author.id}>"
-            msg = await ctx.send(f"Ván đấu sẽ bắt đầu sau 5s,{first_hit} được ra đòn trước", file=file)
+                
+            damage_chance = random.choice(["Y"]*20+["N"]*80)
+            msg = f"Ván đấu sẽ bắt đầu sau 5s,{first_hit} được ra đòn trước"
+            if user["pvp_equip"] == 5:
+                if damage_chance == "Y":
+                    user_at_def = user_at_def*1.1
+                    msg += f"\n{ctx.author.name} Đã được tăng thêm 10% sát thương cho mỗi đòn đánh nhờ trang bị"
+            if tag["pvp_equip"] == 5:
+                if damage_chance == "Y":
+                    tag_at_def = tag_at_def *1.1
+                    msg += f"\n{mention.name} Đã được tăng thêm 10% sát thương cho mỗi đòn đánh nhờ trang bị"
+            file = run()
+            
+            msg = await ctx.send(msg, file=file)
             time.sleep(5)
             while True:
-                tag_at = data[str(mention.id)]["attack"]
-                user_at = data[str(ctx.author.id)]["attack"]
-                content =  f"**{ctx.author.name}:**\nattack: {user_at}\n**{mention.name}:**\nattack: {tag_at}"
-                crit_chance = random.choice(["Y"]*15+["N"]*80+["0"]*5)
+                tag_at = tag_at_def
+                user_at = user_at_def
                 
+                equip_pvp_user = weapon["0" + str(user["pvp_equip"])]["icon"]
+                equip_pvp_tag = weapon["0" + str(tag["pvp_equip"])]["icon"]
+                content =  f"**{ctx.author.name}:**\n<:attack:1119538348051152916>: {user_at}\nTrang bị pvp: {equip_pvp_user}\n**{mention.name}:**\n<:attack:1119538348051152916>: {tag_at}\nTrang bị pvp: {equip_pvp_tag}"
+                
+                #chance
+                #crit
+                if user["pvp_equip"] == 7 or tag["pvp_equip"]:
+                    crit_chance = random.choice(["Y"]*18+["N"]*77+["0"]*5)
+                    
+                else:
+                    crit_chance = random.choice(["Y"]*15+["N"]*80+["0"]*5)
                 if crit_chance == "Y":
                     if turn == "tag":
                         tag_at += 5
@@ -118,12 +149,24 @@ class Pvp(commands.Cog):
                     else:
                         user_at = 0
                         content += f"\n**{ctx.author.name}** đã đánh trượt nên không gây ra sát thương"
+                        
+               #attack
                 else:
                     pass
                 if turn == "tag":
+                    if tag["pvp_equip"] == 6:
+                        hp_chance = random.choice(["Y"]*16+["N"]*84)
+                        if hp_chance == "Y" and tag_hp <=90:
+                            tag_hp += 10
+                            content += f"\n{mention.name} Đã được cộng thêm 10HP nhò trang bị"
                     user_hp -= tag_at
                     turn = "user"
                 else:
+                    if user["pvp_equip"] == 6:
+                        hp_chance = random.choice(["Y"]*16+["N"]*84)
+                        if hp_chance == "Y" and user_hp <=90:
+                            user_hp += 10
+                            content += f"\n{ctx.author.name} Đã được cộng thêm 10HP nhò trang bị"
                     tag_hp -= user_at
                     turn = "tag"
                     
@@ -131,26 +174,28 @@ class Pvp(commands.Cog):
                 file = run()
                 
                 await msg.edit(content =content,attachments=[file])
-                time.sleep(2.5)
+                time.sleep(3)
                 if user_hp == 0:
-                    await ctx.send(f"<@{mention.id}> won!")
+                    await ctx.send(f"<@{mention.id}> đã thắng trận đấu pvp")
                     break
                 elif tag_hp == 0:
-                    await ctx.send(f"<@{ctx.author.id}> won!")
+                    await ctx.send(f"<@{ctx.author.id}> đã thắng trận đấu pvp")
                     break
+                    
                 #user
                 elif user_hp < 0:
                     user_hp = 0
                     file = run()
                     await msg.edit(content =content,attachments=[file])
-                    await ctx.send(f"<@{mention.id}> won!")
+                    await ctx.send(f"<@{mention.id}> đã thắng trận đấu pvp")
                     break
+                    
                 #tag
                 elif tag_hp < 0:
                     tag_hp = 0
                     file = run()
                     await msg.edit(content =content,attachments=[file])
-                    await ctx.send(f"<@{ctx.author.id}> won!")
+                    await ctx.send(f"<@{ctx.author.id}> đã thắng trận đấu pvp")
                     break
         except Exception as e:
             print(e)

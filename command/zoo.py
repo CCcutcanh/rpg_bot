@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from main import get_bank_data, open_account
-from command.cache.var import thuk1,thuk2,thuk3,thuk4,thuk5
+from command.cache.var import thuk1,thuk2,thuk3,thuk4,thuk5, weapon
 class Zoo(commands.Cog):
     config = {
         "name": "zoo",
@@ -15,12 +15,7 @@ class Zoo(commands.Cog):
     @commands.cooldown(1,4,commands.BucketType.user)
     async def zoo(self, ctx):
         try:
-            equipment = {
-                "2": "<:kiemC1:1118523931406631023>",
-                "3": "<:kiemC2:1118524150756163686>",
-                "4": "<:kiemC3:1118524395766415370>",
-                "0": "Không có vật phẩm nào cả"
-            }
+            
             def get_sub(x):
                 normal = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-=()"
                 sub_s = "ₐ₈CDₑբGₕᵢⱼₖₗₘₙₒₚQᵣₛₜᵤᵥwₓᵧZₐ♭꜀ᑯₑբ₉ₕᵢⱼₖₗₘₙₒₚ૧ᵣₛₜᵤᵥwₓᵧ₂₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎"
@@ -55,13 +50,14 @@ class Zoo(commands.Cog):
             msg += common + uncommon + rare + ultra_rare + legendary
             coin = (await get_bank_data())[f"{ctx.author.id}"]["point"]
             hp = (await get_bank_data())[str(ctx.author.id)]["hp"]
-            trang_bi = equipment[str(str((await get_bank_data())[str(ctx.author.id)]["equip"]))]
+            trang_bi = weapon["0" + str(str((await get_bank_data())[str(ctx.author.id)]["equip"]))]["icon"]
+            equip_pvp = weapon["0"+str((await get_bank_data())[str(ctx.author.id)]["pvp_equip"])]["icon"]
             data = await get_bank_data()
             lv = data[str(ctx.author.id)]["lv"]
             exp = data[str(ctx.author.id)]["exp"]
             zp = data[str(ctx.author.id)]["zp"]
             cha = data[str(ctx.author.id)]["character"]
-            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\n<:level:1119126214670561382>: {lv}\nexp: {exp}\nVật phẩm đang sử dụng: {trang_bi}\nzoo point: {zp}\nNhân vật của bạn: {cha}"
+            msg +=f"\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>\nChỉ số HP: {hp}\n<:level:1119126214670561382>: {lv}\nexp: {exp}\nVật phẩm đang sử dụng: {trang_bi}\nTrang bị pvp: {equip_pvp}\nzoo point: {zp}\nNhân vật của bạn: {cha}"
             await ctx.send(msg)
         except Exception as e:
             print(e)
