@@ -40,7 +40,7 @@ class Shop(commands.Cog):
                 return await ctx.send(f"Chỉ số hp của bạn đã tăng lên {hp}")
             
             if coin < wp_choose["price"]:
-                return await ctx.send("**Bạn không đủ :vang: để mua vật phẩm này**")
+                return await ctx.send("**Bạn không đủ <:vang:1116221866273681510> để mua vật phẩm này**")
             data[str(ctx.author.id)]["point"] -= wp_choose["price"]
             if choose.content in list_equip:
                 data[str(ctx.author.id)]["equip"] = int(choose.content)
