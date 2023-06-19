@@ -37,6 +37,7 @@ class Shop(commands.Cog):
                 data[str(ctx.author.id)]["hp"] += 40
                 save_member_data(data)
                 hp = data[str(ctx.author.id)]["hp"]
+                data[str(ctx.author.id)]["point"] -= wp_choose["price"]
                 return await ctx.send(f"Chỉ số hp của bạn đã tăng lên {hp}")
             
             if coin < wp_choose["price"]:
