@@ -35,9 +35,9 @@ class Shop(commands.Cog):
                 if data[str(ctx.author.id)]["hp"] > 60:
                     return await ctx.send("**HP quả bạn đã quá 60 không thể sử dụng bình HP**")
                 data[str(ctx.author.id)]["hp"] += 40
+                data[str(ctx.author.id)]["point"] -= wp_choose["price"]
                 save_member_data(data)
                 hp = data[str(ctx.author.id)]["hp"]
-                data[str(ctx.author.id)]["point"] -= wp_choose["price"]
                 return await ctx.send(f"Chỉ số hp của bạn đã tăng lên {hp}")
             
             if coin < wp_choose["price"]:
