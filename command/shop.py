@@ -16,16 +16,54 @@ class Shop(commands.Cog):
     @commands.cooldown(1,4,commands.BucketType.user)
     async def shop(self, ctx):
         try:
+            await open_account(ctx.author.id)
             data = await get_bank_data()
             coin = data[str(ctx.author.id)]["point"]
-            send = await ctx.send(f"**Đây là các vật phẩm hiện có trong Shop:**\n\n*==Vật phẩm hồi HP==*\n<:binhHP:1118551444497375292> | id: 01 | 25<:vang:1116221866273681510>\n\n*==Vật phẩm tăng số quái có thể săn==*\n <:kiemC1:1118523931406631023> | id: 02 | 80<:vang:1116221866273681510>\n<:kiemC2:1118524150756163686> | id: 03 | 110<:vang:1116221866273681510>\n<:kiemC3:1118524395766415370> | id: 04 | 150<:vang:1116221866273681510>\n==*Vật phẩm hỗ trợ pvp*==\n <:pvpkiem3:1119872683367202846> | id: 05 | 140<:vang:1116221866273681510>\n<:pvpkiem2:1119872536616898560> | id: 06 | 150<:vang:1116221866273681510>\n<:pvpkiem1:1119872240478068826> | id: 07 | 110<:vang:1116221866273681510>\n\nReply tin nhắn này với id vật phẩm bạn muốn mua để mua vật phẩm\n**Sử dụng lệnh wp <weapon_id> để xem thông tin chi tiết về vật phẩm**\n*Vật phẩm bạn mua sẽ thay thế vật phẩm hiện tại bạn đang sử dụng ngoại trừ vật phẩm hồi HP*\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>")
+            msg_send = f"**Đây là các vật phẩm, kĩ năng, bạn có thể mua và học trong shop**:\n"
+            keys = weapon.keys()
+            hp = "==Vật phẩm hồi HP=="
+            hunt = "\n==Vật phẩm hỗ trợ đi săn=="
+            pvp = "\n==Vật phẩm hỗ trợ PVP=="
+            skill = "\n===SKILL==="
+            for i in keys:
+                if i == "00":
+                    pass
+                else:
+                    info = weapon[i]
+                    icon = info["icon"]
+                    id = i
+                    price = str(info["price"])
+                    category = info["category"]
+                    content = "\n" + icon + " | " + id + " | " + price + "<:vang:1116221866273681510>"
+                    if category == "HP":
+                        hp += content
+                    elif category == "hunt":
+                        hunt += content
+                    elif category == "pvp":
+                        pvp += content
+                    elif category == 'skill':
+                        skill += content
+            msg_send += hp + hunt + pvp + skill
+            msg_send +=f"\n\n_Reply tin nhắn này với id vật phẩm bạn muốn mua để mua vật phẩm_\n**Sử dụng lệnh wp <weapon_id> để xem thông tin chi tiết về vật phẩm**\n*Vật phẩm bạn mua sẽ thay thế vật phẩm hiện tại bạn đang sử dụng ngoại trừ vật phẩm hồi HP*\nTổng số vàng hiện có: {coin}<:vang:1116221866273681510>"
+            send = await ctx.send(msg_send)
             def check(m):
                 return m.author.id == ctx.author.id and m.channel == ctx.channel and m.reference is not None and m.reference.message_id == send.id
             choose = await self.bot.wait_for("message", check=check)
             coin = data[str(ctx.author.id)]["point"]
-            list_equip = ["01","02","03","04"]
-            list_equip_pvp = ["05","06","07"]
-            all_equip = list_equip + list_equip_pvp
+            list_equip = []
+            list_equip_pvp = []
+            skill = []
+            all_equip = weapon.keys()
+            for i in all_equip:
+                if i == "00":
+                    pass
+                k = weapon[i]["category"]
+                if k == 'pvp':
+                    list_equip_pvp.append(i)
+                elif k == "hunt":
+                    list_equip.append(i)
+                elif k == "skill":
+                    skill.append(i)
             if not choose.content in all_equip:
                 return await ctx.send("Id không hợp lệ")
             wp_choose = weapon[choose.content]
@@ -47,6 +85,8 @@ class Shop(commands.Cog):
                 data[str(ctx.author.id)]["equip"] = int(choose.content)
             elif choose.content in list_equip_pvp:
                 data[str(ctx.author.id)]["pvp_equip"] = int(choose.content)
+            elif choose.content in skill:
+                data[f"{ctx.author.id}"]["skill"] = int(choose.content)
             icon = wp_choose["icon"]
             save_member_data(data)
             await ctx.send(f"Bạn đã mua vật phẩm {icon}, vật phẩm sẽ được áp dụng từ bây giờ")

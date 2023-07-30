@@ -24,6 +24,7 @@ class Pvp(commands.Cog):
             if mention == None:
                 return await ctx.send("ban chua tag nguoi ban muon pvp cung")
             em = discord.Embed(title= f"**{ctx.author.name} Đã gửi lời đề nghị thách đấu tới {mention.name}, bạn có đồng ý hay không?**", color = random.choice(list_color))
+            
             send = await ctx.send(embed=em)
             await send.add_reaction("❎")
             await send.add_reaction("✅")
@@ -33,9 +34,13 @@ class Pvp(commands.Cog):
                     return True
                 elif mem.id != mention.id or str(reaction.emoji) == "✅":
                     return False
+                    
             react = await self.bot.wait_for("reaction_add", check = check)
             if not react:
                 return await ctx.send(f"**{mention.name} Đã từ chối lời đề nghị của bạn**")
+            
+            #function
+            
             def drawProgressBar(d, x, y, w, h, progress, bg="white", fg="red"):
                 if progress== 0:
                     d.rectangle((x+w, y, x+h+w, y+h), fill=bg)
@@ -83,12 +88,12 @@ class Pvp(commands.Cog):
                 #tag
                 cha_user_paste = Image.open(cha_user_path)
                 cha_tag_paste = Image.open(cha_tag_path)
-                Image.Image.paste(out, cha_tag_paste, (25, 40))
+                Image.Image.paste(out, cha_tag_paste, (25, 38))
                 d1 = ImageDraw.Draw(out)
                 tag = drawProgressBar(d1, 30, 10, 69, 8, tag_hp/100)
                 d1.text((30, 1), f"{cha_tag}", fill=(255, 255, 255))
                 #user
-                Image.Image.paste(out, cha_user_paste, (165,40))
+                Image.Image.paste(out, cha_user_paste, (165,38))
                 drawProgressBar(d1, 140, 10, 69,8,user_hp/100)
                 d1.text((140, 1), f"{cha_user}", fill=(255, 255, 255))
                 file = discord.File(fp=bytesarr(out), filename="pvp.png")
@@ -108,25 +113,40 @@ class Pvp(commands.Cog):
                 
             damage_chance = random.choice(["Y"]*20+["N"]*80)
             msg = f"Ván đấu sẽ bắt đầu sau 5s,{first_hit} được ra đòn trước"
-            if user["pvp_equip"] == 5:
-                if damage_chance == "Y":
-                    user_at_def = user_at_def*1.1
-                    msg += f"\n{ctx.author.name} Đã được tăng thêm 10% sát thương cho mỗi đòn đánh nhờ trang bị"
-            if tag["pvp_equip"] == 5:
-                if damage_chance == "Y":
-                    tag_at_def = tag_at_def *1.1
-                    msg += f"\n{mention.name} Đã được tăng thêm 10% sát thương cho mỗi đòn đánh nhờ trang bị"
+            
+            #check skill, equip pvp
+            #user
+            if user["skill"] == 8:
+                user_at_def += 3
+            if user["skill"] == 9:
+                tag_at_def -= 3
+             
+            #tag
+            if tag["skill"] == 8:
+                tag_at_def += 3
+            if tag["skill"] == 9:
+                user_at_def -= 3
+            
+            if user["pvp_equip"] == 5 and damage_chance == "Y":
+                user_at_def = user_at_def*1.1
+                msg += f"\n{ctx.author.name} Đã được tăng thêm 10% sát thương cho mỗi đòn đánh nhờ trang bị"
+            if tag["pvp_equip"] == 5 and damage_chance == "Y":
+                tag_at_def = tag_at_def *1.1
+                msg += f"\n{mention.name} Đã được tăng thêm 10% sát thương cho mỗi đòn đánh nhờ trang bị"
             file = run()
             
             msg = await ctx.send(msg, file=file)
+            equip_pvp_user = weapon["0" + str(user["pvp_equip"])]["icon"]
+            equip_pvp_tag = weapon["0" + str(tag["pvp_equip"])]["icon"]
+            user_skill = weapon["0" + str(user["skill"])]["icon"]
+            tag_skill = weapon["0" + str(tag["skill"])]["icon"]
+            draw_turn = 0
             time.sleep(5)
             while True:
                 tag_at = tag_at_def
                 user_at = user_at_def
                 
-                equip_pvp_user = weapon["0" + str(user["pvp_equip"])]["icon"]
-                equip_pvp_tag = weapon["0" + str(tag["pvp_equip"])]["icon"]
-                content =  f"**{ctx.author.name}:**\n<:attack:1119538348051152916>: {user_at}\nTrang bị pvp: {equip_pvp_user}\n**{mention.name}:**\n<:attack:1119538348051152916>: {tag_at}\nTrang bị pvp: {equip_pvp_tag}"
+                content =  f"**{ctx.author.name}:**\n<:attack:1119538348051152916>: {user_at}\nTrang bị pvp: {equip_pvp_user}\nskill: {user_skill}\n**{mention.name}:**\n<:attack:1119538348051152916>: {tag_at}\nTrang bị pvp: {equip_pvp_tag}\nskill: {tag_skill}"
                 
                 #chance
                 #crit
@@ -159,6 +179,10 @@ class Pvp(commands.Cog):
                         if hp_chance == "Y" and tag_hp <=90:
                             tag_hp += 10
                             content += f"\n{mention.name} Đã được cộng thêm 10HP nhò trang bị"
+                    chance = random.choice(["Y"]*10 + ["N"]*90)
+                    if user["skill"] == 10 and chance == "Y":
+                        content += f"\n**{ctx.author.name} Đã sử dụng skill nên được miễn thương đòn đánh**"
+                        tag_at = 0
                     user_hp -= tag_at
                     turn = "user"
                 else:
@@ -167,36 +191,45 @@ class Pvp(commands.Cog):
                         if hp_chance == "Y" and user_hp <=90:
                             user_hp += 10
                             content += f"\n{ctx.author.name} Đã được cộng thêm 10HP nhò trang bị"
+                    chance = random.choice(["Y"]*10 + ["N"]*90)
+                    if tag["skill"] == 10 and chance == "Y":
+                        content += f"\n**{mention.name} Đã sử dụng skill nên được miễn thương đòn đánh**"
+                        user_at = 0
                     tag_hp -= user_at
                     turn = "tag"
-                    
-                
-                file = run()
-                
-                await msg.edit(content =content,attachments=[file])
-                time.sleep(3)
-                if user_hp == 0:
-                    await ctx.send(f"<@{mention.id}> đã thắng trận đấu pvp")
-                    break
-                elif tag_hp == 0:
-                    await ctx.send(f"<@{ctx.author.id}> đã thắng trận đấu pvp")
-                    break
-                    
-                #user
-                elif user_hp < 0:
+                if user_hp <= 0:
                     user_hp = 0
-                    file = run()
-                    await msg.edit(content =content,attachments=[file])
-                    await ctx.send(f"<@{mention.id}> đã thắng trận đấu pvp")
-                    break
-                    
-                #tag
-                elif tag_hp < 0:
+                elif tag_hp <= 0:
                     tag_hp = 0
+                draw_turn += 1
+                if draw_turn == 2:
+                    draw_turn = 0
                     file = run()
+                    
                     await msg.edit(content =content,attachments=[file])
-                    await ctx.send(f"<@{ctx.author.id}> đã thắng trận đấu pvp")
-                    break
+                    time.sleep(3)
+                    if user_hp == 0:
+                        await ctx.send(f"<@{mention.id}> đã thắng trận đấu pvp")
+                        break
+                    elif tag_hp == 0:
+                        await ctx.send(f"<@{ctx.author.id}> đã thắng trận đấu pvp")
+                        break
+                        
+                    #user
+                    elif user_hp < 0:
+                        user_hp = 0
+                        file = run()
+                        await msg.edit(content =content,attachments=[file])
+                        await ctx.send(f"<@{mention.id}> đã thắng trận đấu pvp")
+                        break
+                        
+                    #tag
+                    elif tag_hp < 0:
+                        tag_hp = 0
+                        file = run()
+                        await msg.edit(content =content,attachments=[file])
+                        await ctx.send(f"<@{ctx.author.id}> đã thắng trận đấu pvp")
+                        break
         except Exception as e:
             print(e)
             await ctx.send(f"error: {e}")

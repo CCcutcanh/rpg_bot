@@ -42,48 +42,78 @@ weapon = {
             "00":{
                 "desc": "error",
                 "price": 0,
-                "icon": "Không có vật phẩm nào cả"
+                "icon": "Không có",
+                "id": 0,
+                "category": "None"
             },
             "01": {
                 "desc": "Hồi 40HP cho nhân vật để có thể tiếp tục đi săn",
-                "price": 25,
+                "price": 30,
                 "icon": "<:binhHP:1118551444497375292>",
-                "id": 1
+                "id": 1,
+                "category": "HP"
             },
             "02": {
                 "desc": "Mỗi lần đi săn có tỉ lệ 40% săn được hai quái cùng lúc",
-                "price": 80,
+                "price": 160,
                 "icon": "<:kiemC1:1118523931406631023>",
-                "id": 2
+                "id": 2,
+                "category": "hunt"
             },
             "03": {
                 "desc": "Mỗi lần đi săn có tỉ lệ 60% săn được hai quái cùng lúc",
-                "price": 110,
+                "price": 220,
                 "icon": "<:kiemC2:1118524150756163686>",
-                "id": 3
+                "id": 3,
+                "category": "hunt"
             },
             "04": {    
                 "desc": "Mỗi lần đi săn có tỉ lệ 100% săn được hai quái cùng lúc",
-                "price": 150,
+                "price": 300,
                 "icon": "<:kiemC3:1118524395766415370>",
-                "id": 4
+                "id": 4,
+                "category": "hunt"
             },
             "05": {
                 "icon": "<:pvpkiem3:1119872683367202846>",
                 "desc": "có tỉ lệ 20% ở mỗi trận đánh tất cả các đòn đánh trong trận sẽ tăng 10% dame",
-                "price": 140,
-                "id": 5
+                "price": 280,
+                "id": 5,
+                "category": "pvp"
             },
             "06": {
                 "icon": "<:pvpkiem2:1119872536616898560>",
                 "desc": "có tỉ lệ 16% ở mỗi lượt đánh khi máu thấp hơn hoặc bằng 90 thì sẽ tăng 10 HP",
-                "price": 150,
-                "id": 6
+                "price": 300,
+                "id": 6,
+                "category": "pvp"
             },
             "07": {
                 "icon": "<:pvpkiem1:1119872240478068826>",
                 "desc": "tăng 3% tỉ lệ chí mạng",
-                "price": 110,
-                "id": 7
+                "price": 220,
+                "id": 7,
+                "category": "pvp"
+            },
+            "08": {
+                "icon": "<:skillkamejoko:1120524585209704458>",
+                "desc": "+3 attack",
+                "price": 1000,
+                "id": 8,
+                "category": "skill"
+            },
+            "09": {
+                "icon": "<:skillkhiennangluong:1120634345665855538>",
+                "desc": "-3 attack đối thủ",
+                "price": 1000,
+                "id": 9,
+                "category": "skill"
+            },
+            "010": {
+                "icon": "<:skilltaitaonangluong:1120632506132209684>",
+                "desc": "Tỉ lệ 10% mỗi lượt được miễn thương đòn đánh",
+                "price": 1000,
+                "id": 10,
+                "category": "skill"
             }
         }

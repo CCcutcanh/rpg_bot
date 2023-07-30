@@ -3,6 +3,8 @@ from discord.ext import commands
 import main
 import random
 from command.cache.var import thuk1,thuk2,thuk3,thuk4,thuk5, weapon
+from captcha.image import ImageCaptcha
+import string
 
 class Hunt(commands.Cog):
     config = {
@@ -17,25 +19,41 @@ class Hunt(commands.Cog):
     @commands.cooldown(1, 9, commands.BucketType.user)
     async def hunt(self, ctx):
         try:
-            equipment = {
-                "2": "<:kiemC1:1118523931406631023>",
-                "3": "<:kiemC2:1118524150756163686>",
-                "4": "<:kiemC3:1118524395766415370>",
-                "0": "Không có vật phẩm nào cả"
-            }
             await main.open_account(ctx.author.id)
             data = await main.get_bank_data()
+            if data[str(ctx.author.id)]["captcha"] == 0:
+                image = ImageCaptcha(width = 300, height = 100)
+                password = list(string.ascii_lowercase + "0123456789" + "!#$%&*+<=>?@^{}")
+                result = ""
+                for i in range(6):
+                    result += random.choice(password)
+                image.generate(result)
+                image.write(result, ("captcha") + ".png")
+                file = discord.File("captcha.png")
+                send = await ctx.send(file = file)
+                def check(m):
+                    return m.author.id == ctx.author.id and m.channel == ctx.channel and m.reference is not None and m.reference.message_id == send.id
+                captcha = await self.bot.wait_for("message", check=check)
+                if captcha.content != result:
+                    await ctx.send("Sai captcha!")
+                    return
+                data[str(ctx.author.id)]["captcha"] = 30
+                main.save_member_data(data)
+                await ctx.send("Cảm ơn bạn đã giải captcha")
             if data[f"{ctx.author.id}"]["hp"] <= 24:
                 return await ctx.send(f'ban con {data[f"{ctx.author.id}"]["hp"]}HP khong du de di san')
+            
             quaix2 = False
             def hunt():
+                user = data[f"{ctx.author.id}"]
+                equip = user["equip"]
                 rank = data[str(ctx.author.id)]["lv"]
-                if rank <= 3:
+                if rank <= 5:
                     chance = random.choice(["K1"]*65+["K2"]*35)
-                elif 3 < rank <= 8:
+                elif 5 < rank < 10:
                     chance = random.choice(["K1"]*50+["K2"]*40+["K3"]*3+["K0"]*7)
                 else:
-                    chance = random.choice(["K1"] * 520 + ["K2"]*350 + ["K3"] * 55 + ["K4"] * 3 + ["K5"]*2 + ["K0"]*70)
+                    chance = random.choice(["K1"] * 520 + ["K2"]*360 + ["K3"] * 35 + ["K4"] * 3 + ["K5"]*2 + ["K0"]*80)
                 place = random.choice(["Thung lũng namec","Thung Lũng Tre","Vách Núi Đen","Doanh trại độc nhãn","Đảo Kame"])
                 if chance == "K0":
                     hunt = "🚫"
@@ -116,6 +134,7 @@ class Hunt(commands.Cog):
             data[f"{ctx.author.id}"]["point"] += coin
             data[f"{ctx.author.id}"]["hp"] -= hp
             data[str(ctx.author.id)]["zp"] += zp
+            data[str(ctx.author.id)]["captcha"] -= 1
             if data[str(ctx.author.id)]["zp"] >= 100:
                 await ctx.send(f"**Điểm zoo point của {ctx.author.name} đã đủ 100,  bạn sẽ được tăng 0,2 attack, số point hiện tại sẽ về 0**", delete_after=5)
                 data[str(ctx.author.id)]["attack"] += 0.2
